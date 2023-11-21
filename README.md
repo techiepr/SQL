@@ -1,1 +1,1 @@
-Hello There, This is a place holder for all the SQL queries I am writing.
+Hello There, This is a placeholder for all the SQL queries I am practicing.
