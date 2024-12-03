@@ -1,0 +1,10 @@
+select name 
+from
+( select c.name,
+         count(v.id)
+  from candidate c
+  left join vote v 
+  on c.id = v.candidateId
+  group by c.name
+  order by 2 desc 
+  limit 1 )x
