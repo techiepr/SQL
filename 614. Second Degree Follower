@@ -1,0 +1,20 @@
+with num_follower as
+(
+select followee as name,
+       count(follower) as num_follower
+from follow
+group by followee
+), num_following as
+(
+select follower as name,
+       count(followee) as num_following
+from follow
+group by follower
+)
+select distinct n1.name as follower, num_follower as num
+from num_follower n1
+join num_following n2
+on n1.name = n2.name
+where num_follower >= 1
+and num_following >= 1
+order by n1.name
