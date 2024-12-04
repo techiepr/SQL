@@ -12,4 +12,4 @@ SELECT
     grade
 FROM cte
 WHERE rnk = 1
-ORDER BY student_id;
+ORDER BY student_id
