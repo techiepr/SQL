@@ -1,0 +1,17 @@
+with cte as
+(
+select question_id,
+       count(case when action = 'answer' then 1 else null end) as num_ans,
+       count(case when action = 'show' then 1 else null end) as num_show
+from surveylog
+group by question_id
+), cte1 as
+(
+select question_id, 
+       case when num_show > 0 then num_ans/num_show else 0 end as rate
+from cte
+)
+select question_id as survey_log
+from cte1
+order by rate desc, question_id asc
+limit 1

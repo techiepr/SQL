@@ -1,0 +1,11 @@
+with cte as
+(
+select *,
+       avg(occurrences) over (partition by event_type) as avg_occ
+from events
+)
+select business_id
+from cte
+where occurrences > avg_occ
+group by 1
+having count(business_id) > 1
