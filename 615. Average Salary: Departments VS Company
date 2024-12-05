@@ -25,3 +25,4 @@ select c.pay_month,
 from company_per_month_avg c
 left join department_per_month_avg d
 on c.pay_month = d.pay_month
+#
