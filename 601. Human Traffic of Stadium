@@ -1,0 +1,18 @@
+with cte as
+(
+select *,
+       row_number() over (order by id) as rwn,
+       id- (row_number() over (order by id)) as diff
+from stadium
+where people >= 100
+order by visit_date
+), cte1 as
+(
+select diff
+from cte
+group by diff
+having count(*) >= 3
+)
+select id, visit_date, people
+from cte
+where diff in (select diff from cte1)

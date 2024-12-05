@@ -1,0 +1,27 @@
+with company_per_month_avg as
+(
+select date_format(s.pay_date,'%Y-%m') as pay_month,
+       round(avg(s.amount),0) as com_avg_amt
+from salary s
+join employee e
+on s.employee_id = e.employee_id
+group by  date_format(s.pay_date,'%Y-%m')
+), department_per_month_avg as
+ (
+select e.department_id,
+       round(avg(amount),0) as department_avg_salary,
+       date_format(pay_date,'%Y-%m') as pay_month
+from salary s
+join employee e
+on s.employee_id = e.employee_id
+group by e.department_id, date_format(pay_date,'%Y-%m')
+)
+select c.pay_month,
+       d.department_id,
+       case 
+            when department_avg_salary > com_avg_amt then 'higher'
+            when department_avg_salary = com_avg_amt then 'same'
+        else 'lower' end as comparison
+from company_per_month_avg c
+left join department_per_month_avg d
+on c.pay_month = d.pay_month
