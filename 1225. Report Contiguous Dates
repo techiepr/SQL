@@ -1,0 +1,33 @@
+with cte as
+(
+select fail_date as dates,
+       'failed' as status
+from failed
+where fail_date between '2019-01-01' and '2019-12-31'
+union all 
+select success_date as dates,
+       'succeeded' as status
+from succeeded
+where success_date between '2019-01-01' and '2019-12-31'
+)
+,ranked_dates as
+(
+  select dates,
+         status,
+         row_number() over (order by dates) as rwn1,
+         row_number() over (partition by status order by dates) as rwn2,
+         row_number() over (order by dates) - row_number() over (partition by status order by dates) as rwn3
+  from cte
+  order by rwn1, rwn2
+)
+-- , grouped_intervals as
+(
+    select status as period_state,
+           min(dates) as start_date,
+           max(dates) as end_date
+    from ranked_dates
+    group by status, rwn3
+    order by min(dates)
+)
+
+
