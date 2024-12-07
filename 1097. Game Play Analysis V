@@ -1,0 +1,29 @@
+with first_login as
+(
+select player_id,
+       min(event_date) as install_date
+from activity
+group by player_id
+), cte2 as
+(
+select install_date,
+      count(player_id) as num_installs_first_day
+from first_login
+group by install_date
+)
+,day_one_retention as
+(
+    select install_date,
+           count(distinct a.player_id) as num_installs_next_day
+    from first_login f
+    left join activity a
+    on f.player_id = a.player_id
+    and a.event_date = date_add(f.install_date, interval 1 day)
+    group by install_date
+)
+select d.install_date as install_dt,
+       num_installs_first_day as installs,
+       round(num_installs_next_day/num_installs_first_day,2) as Day1_retention
+from day_one_retention d
+join cte2 c
+on d.install_date = c.install_date
