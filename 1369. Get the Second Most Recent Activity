@@ -1,0 +1,18 @@
+# Write your MySQL query statement below
+with cte as
+(
+select username,
+       activity,
+       startDate,
+       endDate,
+       dense_rank() over (partition by username order by startdate desc) as dnsrnk,
+       count(*) over (partition by username) as num_activity
+from useractivity
+)
+
+select username,
+       activity,
+       startDate,
+       endDate
+from cte
+where dnsrnk = 2 or num_activity = 1
