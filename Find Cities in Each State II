@@ -1,0 +1,24 @@
+WITH cte AS (
+    SELECT 
+        state,
+        city,
+        SUM(IF(LEFT(city, 1) = LEFT(state, 1), 1, 0)) OVER (PARTITION BY state) AS matching_letter_count,
+        COUNT(*) OVER (PARTITION BY state) AS city_count
+    FROM cities
+),
+cte1 AS (
+    SELECT 
+        state,
+        GROUP_CONCAT(city ORDER BY city ASC SEPARATOR ', ') AS cities,
+        MAX(matching_letter_count) AS matching_letter_count,
+        MAX(city_count) AS city_count
+    FROM cte
+    GROUP BY state
+    HAVING city_count > 2 AND matching_letter_count > 0
+)
+SELECT 
+    state,
+    cities,
+    matching_letter_count
+FROM cte1
+ORDER BY matching_letter_count DESC, state ASC;
