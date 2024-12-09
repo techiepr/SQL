@@ -1,0 +1,31 @@
+WITH cte AS (
+    SELECT 
+        season_id,
+        team_id,
+        team_name,
+        (wins * 3 + draws) AS points,
+        (goals_for - goals_against) AS goal_difference
+    FROM SeasonStats
+),
+cte1 AS (
+    SELECT 
+        season_id,
+        team_id,
+        team_name,
+        points,
+        goal_difference,
+        DENSE_RANK() OVER (
+            PARTITION BY season_id 
+            ORDER BY points DESC, goal_difference DESC, team_name ASC
+        ) AS position
+    FROM cte
+)
+SELECT 
+    season_id,
+    team_id,
+    team_name,
+    points,
+    goal_difference,
+    position
+FROM cte1
+ORDER BY season_id, position;
