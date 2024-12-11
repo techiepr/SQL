@@ -1,0 +1,14 @@
+with cte as
+(
+select percent_rank() over (partition by state order by fraud_score desc) as rnk,
+       state,
+       policy_id,
+       fraud_score
+from fraud
+)
+select policy_id,
+       state,
+       fraud_score
+from cte
+where rnk <= 0.05
+order by state asc, fraud_score desc, policy_id asc
