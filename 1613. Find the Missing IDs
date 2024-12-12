@@ -1,6 +1,6 @@
 with recursive cte as
 (
-select min(customer_id) as customer_ids
+select 1 as customer_ids
 from customers
 union all
 select customer_ids+1
@@ -8,6 +8,6 @@ from cte
 where customer_ids < (select max(customer_id) from customers)
 )
 
-select customer_ids as ids
+select distinct customer_ids as ids
 from cte
 where customer_ids not in (select customer_id from customers)
