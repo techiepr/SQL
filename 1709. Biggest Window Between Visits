@@ -1,0 +1,16 @@
+with cte as
+(
+select user_id,
+       visit_date,
+       lead(visit_date) over (partition by user_id order by visit_date) as next_date
+from uservisits
+), cte1 as
+(
+select user_id,
+       case when next_date is not null then datediff(next_date,visit_date) 
+       else datediff(cast('2021-01-01' as date),visit_date) end as windows
+from cte
+)
+select user_id, max(windows) as biggest_window
+from cte1
+group by user_id
