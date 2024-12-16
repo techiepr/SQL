@@ -1,0 +1,27 @@
+with cte as
+(
+select v.visit_id, 
+       v.member_id,
+       v.visit_date,
+       p.charged_amount
+from visits v
+left join purchases p
+on v.visit_id = p.visit_id
+order by member_id
+), cte1 as
+(
+select member_id,
+       round(sum(case when charged_amount is not null then 1 else 0 end)*100/count(*),2) as percent
+from cte
+group by member_id
+)
+select m.member_id,
+       m.name,
+       case when c2.percent >= 80 then 'Diamond'
+            when c2.percent>= 50 and c2.percent < 80 then 'Gold'
+            when c2.percent < 50 then 'Silver'
+        else 'Bronze' end as category
+from members m
+left join cte1 c2
+on m.member_id = c2.member_id
+order by member_id
