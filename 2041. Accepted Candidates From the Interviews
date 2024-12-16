@@ -1,0 +1,14 @@
+with cte as
+(
+select c.candidate_id,
+       sum(c.years_of_exp),
+       sum(r.score)
+from candidates c
+join rounds r
+on c.interview_id = r.interview_id
+where c.years_of_exp >= 2
+group by c.candidate_id
+having sum(c.years_of_exp) >= 2
+and sum(r.score) > 15)
+select candidate_id
+from cte
