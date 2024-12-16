@@ -27,3 +27,4 @@ select d.install_date as install_dt,
 from day_one_retention d
 join cte2 c
 on d.install_date = c.install_date
+
