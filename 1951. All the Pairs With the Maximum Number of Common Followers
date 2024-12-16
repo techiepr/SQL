@@ -1,0 +1,20 @@
+with cte as
+(
+select r1.user_id as user1_id,
+       r2.user_id as user2_id,
+       r2.follower_id 
+from relations r1
+left join relations r2
+on r1.user_id < r2.user_id
+and r1.follower_id = r2.follower_id
+), cte1 as
+(
+select user1_id, 
+       user2_id,
+       count(distinct follower_id) as max_common
+from cte
+group by user1_id, user2_id
+)
+select user1_id, user2_id
+from cte1
+where max_common = (select max(max_common) from cte1)
