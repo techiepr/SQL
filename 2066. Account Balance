@@ -1,0 +1,15 @@
+with cte as
+(
+select account_id,
+       day,
+       sum(case when type = 'Deposit' then amount
+            else amount*(-1) end) as amounts
+from transactions
+group by account_id, day
+order by account_id, day)
+select account_id,
+       day,
+       sum(amounts) over (partition by account_id order by day asc) as balance
+from cte
+group by 1,2
+order by 1,2 
