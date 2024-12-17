@@ -1,0 +1,7 @@
+select user_id
+from emails e
+join texts t
+on e.email_id = t.email_id
+where date_format(action_date, '%Y-%m-%d') = date_add(date_format(signup_date,'%Y-%m-%d'), interval 1 day)
+and signup_action = 'verified'
+order by user_id
