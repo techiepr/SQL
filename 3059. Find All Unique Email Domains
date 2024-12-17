@@ -1,0 +1,8 @@
+with cte as
+(select substring_index(email,'@', -1) as email_domain, count(*) as count
+from emails
+group by 1)
+select email_domain, count
+from cte
+where email_domain like '%.com'
+order by email_domain asc
