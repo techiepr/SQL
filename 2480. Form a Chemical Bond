@@ -1,0 +1,15 @@
+with cte1 as
+(
+select symbol
+from elements
+where type='Metal'
+), cte2 as
+(
+select symbol
+from elements
+where type='Nonmetal'
+)
+select c1.symbol as metal,
+       c2.symbol as nonmetal
+from cte1 c1
+cross join cte2 c2
