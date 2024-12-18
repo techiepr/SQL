@@ -1,0 +1,11 @@
+with cte as
+(select *,
+      rank() over (partition by emp_id order by salary desc) as rnk
+from salary)
+select emp_id,
+       firstname,
+       lastname,
+       salary,
+       department_id
+from cte 
+where rnk = 1
