@@ -9,3 +9,4 @@ order by candidate_id
 )
 select candidate_id
 from cte
+
