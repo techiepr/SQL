@@ -1,0 +1,12 @@
+with cte as
+(
+select p1.project_id, count(distinct e1.employee_id) num_emp
+from project p1
+join employee e1
+on p1.employee_id = e1.employee_id
+group by 1
+order by 2 desc
+)
+select project_id
+from cte
+where num_emp = (select max(num_emp) from cte)
