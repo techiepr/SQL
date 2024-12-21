@@ -1,0 +1,10 @@
+with cte as
+(
+select activity,
+       count(*) over (partition by activity) as num
+from friends
+)
+select distinct activity 
+from cte
+where num != (select max(num) from cte)
+and num != (select min(num) from cte)
