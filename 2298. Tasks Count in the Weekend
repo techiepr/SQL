@@ -1,0 +1,17 @@
+with cte as
+(
+select task_id,
+       assignee_id,
+      case when weekday(submit_date) = 0 then 'Monday'
+            when weekday(submit_date) = 1 then 'Tuesday'
+            when weekday(submit_date) = 2 then 'Wednesday'
+            when weekday(submit_date) = 3 then 'Thursday'
+            when weekday(submit_date) = 4 then 'Friday'
+            when weekday(submit_date) = 5 then 'Saturday'
+            when weekday(submit_date) = 6 then 'Sunday'
+        end as weekdays
+from tasks
+)
+select sum(case when weekdays in ('Saturday', 'Sunday') then 1 else 0 end) as weekend_cnt, 
+       sum(case when weekdays not in ('Saturday', 'Sunday') then 1 else 0 end) as working_cnt
+from cte
