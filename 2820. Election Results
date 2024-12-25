@@ -1,198 +1,25 @@
-LeetCode Logo
-Problem List
-0
-
-avatar
-Debugging...
-Debugging...
-
-
-
-
-
-
-
-Run
-Description
-Accepted
-Accepted
-Editorial
-Editorial
-Solutions
-Solutions
-Submissions
-Submissions
-
-
-Code
-Testcase
-Testcase
-Test Result
-Solved
-Medium
-SQL Schema
-Pandas Schema
-Table: Votes
-
-+-------------+---------+ 
-| Column Name | Type    | 
-+-------------+---------+ 
-| voter       | varchar | 
-| candidate   | varchar |
-+-------------+---------+
-(voter, candidate) is the primary key (combination of unique values) for this table.
-Each row of this table contains name of the voter and their candidate. 
-The election is conducted in a city where everyone can vote for one or more candidates or choose not to vote. Each person has 1 vote so if they vote for multiple candidates, their vote gets equally split across them. For example, if a person votes for 2 candidates, these candidates receive an equivalent of 0.5 votes each.
-
-Write a solution to find candidate who got the most votes and won the election. Output the name of the candidate or If multiple candidates have an equal number of votes, display the names of all of them.
-
-Return the result table ordered by candidate in ascending order.
-
-The result format is in the following example.
-
- 
-
-Example 1:
-
-Input: 
-Votes table:
-+----------+-----------+
-| voter    | candidate |
-+----------+-----------+
-| Kathy    | null      |
-| Charles  | Ryan      |
-| Charles  | Christine |
-| Charles  | Kathy     |
-| Benjamin | Christine |
-| Anthony  | Ryan      |
-| Edward   | Ryan      |
-| Terry    | null      |
-| Evelyn   | Kathy     |
-| Arthur   | Christine |
-+----------+-----------+
-Output: 
-+-----------+
-| candidate | 
-+-----------+
-| Christine |  
-| Ryan      |  
-+-----------+
-Explanation: 
-- Kathy and Terry opted not to participate in voting, resulting in their votes being recorded as 0. Charles distributed his vote among three candidates, equating to 0.33 for each candidate. On the other hand, Benjamin, Arthur, Anthony, Edward, and Evelyn each cast their votes for a single candidate.
-- Collectively, Candidate Ryan and Christine amassed a total of 2.33 votes, while Kathy received a combined total of 1.33 votes.
-Since Ryan and Christine received an equal number of votes, we will display their names in ascending order.
-Seen this question in a real interview before?
-1/5
-Yes
-No
-Accepted
-2.8K
-Submissions
-4.2K
-Acceptance Rate
-66.9%
-Discussion (0)
-
-Choose a type
-
-
-
-Copyright ©️ 2024 LeetCode All rights reserved
-
-21
-
-
-0
-
-
-
-2 Online
-MySQL
-
-Auto
-
-
-
-
-181917202122232425
+with cte as
+(
+select voter,
+       1/count(*) as value
+from votes
+group by 1)
+, cte1 as
+(
+select candidate, 
+       c1.voter,
+       c1.value
+from votes v1
+join cte c1
+on v1.voter = c1.voter
+order by candidate
+), cte2 as
+(
+select candidate, sum(value) num_vote
+from cte1
+group by 1
 )
 select distinct candidate
 from cte2
 where num_vote = (select max(num_vote) from cte2)
 order by candidate
-Saved
-Accepted
-Runtime: 159 ms
-Case 1
-Input
-Votes =
-| voter    | candidate |
-| -------- | --------- |
-| Kathy    | null      |
-| Charles  | Ryan      |
-| Charles  | Christine |
-| Charles  | Kathy     |
-| Benjamin | Christine |
-| Anthony  | Ryan      |
-View more
-Output
-| candidate |
-| --------- |
-| Christine |
-| Ryan      |
-Expected
-| candidate |
-| --------- |
-| Christine |
-| Ryan      |
-Contribute a testcase
-Problem List
-
-Tag
-1988. Find Cutoff Score for Each School
-Med.
-
-3124. Find Longest Calls
-Med.
-
-2159. Order Two Columns Independently
-Med.
-
-3126. Server Utilization Time
-Med.
-
-2175. The Change in Global Rankings
-Med.
-
-3140. Consecutive Available Seats II
-Med.
-
-3118. Friday Purchase III
-Med.
-
-2738. Count Occurrences in Text
-Med.
-
-2388. Change Null Values in a Table to the Previous Value
-Med.
-
-1990. Count the Number of Experiments
-Med.
-
-2142. The Number of Passengers in Each Bus I
-Med.
-
-2228. Users With Two Purchases Within Seven Days
-Med.
-
-2688. Find Active Users
-Med.
-
-2394. Employees With Deductions
-Med.
-
-2922. Market Analysis III
-Med.
-
-3089. Find Bursty Behavior
-Med.
