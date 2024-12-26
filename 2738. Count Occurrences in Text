@@ -1,0 +1,7 @@
+select 'bull' as word,
+       sum(if(content like '% bull %',1,0)) as count
+from files
+union
+select 'bear' as word,
+       sum(if(content like '% bear %',1,0)) as count
+from files
