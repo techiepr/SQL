@@ -1,0 +1,15 @@
+with cte as
+(
+select *,
+       lag(arrival_time,1) over (order by arrival_time) as prev_bus_time
+from buses
+)
+select c.bus_id,
+       sum(case when c.arrival_time >= p.arrival_time
+           and p.arrival_time > ifnull(c.prev_bus_time,0) then 1 else 0 end) as 
+           passengers_cnt
+from cte as c
+left join passengers as p
+on c.arrival_time >= p.arrival_time
+group by c.bus_id
+order by c.bus_id
